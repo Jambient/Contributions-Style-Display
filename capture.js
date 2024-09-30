@@ -81,5 +81,4 @@ function stopRecording() {
     }, 100);
 
     startButton.disabled = false;
-    stopButton.disabled = true;
 }
