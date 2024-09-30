@@ -3,10 +3,13 @@ import {resetAnimation, rows, cells, renderMessages, parseMessages, setStatus} f
 const startButton = document.getElementById('start');
 const testButton = document.getElementById('test');
 const content = document.getElementById('content');
+
+const frameDelay = 200;
+
 let gif = new GIF({
     workers: 2,
     quality: 10,
-    delay: 150,
+    delay: frameDelay,
     width: 738,
     height: 136,
     workerScript: 'gif.worker.js'
@@ -21,7 +24,7 @@ function captureFrames() {
             backgroundColor: '#0d1117',
             useCORS: true
         }).then(canvas => {
-            gif.addFrame(canvas, { delay: 100 });
+            gif.addFrame(canvas, { delay: frameDelay });
             requestAnimationFrame(captureFrames);
         }).catch(error => {
             console.error('Error capturing canvas:', error);
