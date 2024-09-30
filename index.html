@@ -3,54 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Record GIF</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div>
-        <table>
-            <thead>
-                <tr style="height: 13px">
-                    <td style="width: 35px"></td>
-                    <td colspan="5"><span>Jan</span></td>
-                    <td colspan="4"><span>Feb</span></td>
-                    <td colspan="5"><span>Mar</span></td>
-                    <td colspan="4"><span>Apr</span></td>
-                    <td colspan="4"><span>May</span></td>
-                    <td colspan="5"><span>Jun</span></td>
-                    <td colspan="4"><span>Jul</span></td>
-                    <td colspan="4"><span>Aug</span></td>
-                    <td colspan="5"><span>Sep</span></td>
-                    <td colspan="4"><span>Oct</span></td>
-                    <td colspan="4"><span>Nov</span></td>
-                    <td colspan="5"><span>Dec</span></td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><span>Mon</span></td>
-                </tr>
-                <tr>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><span>Wed</span></td>
-                </tr>
-                <tr>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><span>Fri</span></td>
-                </tr>
-                <tr>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<div id="content" style="">
+    <table>
+        <thead>
+        <tr style="height: 13px">
+            <td style="width: 35px"></td>
+            <td colspan="5"><span>Jan</span></td>
+            <td colspan="4"><span>Feb</span></td>
+            <td colspan="5"><span>Mar</span></td>
+            <td colspan="4"><span>Apr</span></td>
+            <td colspan="4"><span>May</span></td>
+            <td colspan="5"><span>Jun</span></td>
+            <td colspan="4"><span>Jul</span></td>
+            <td colspan="4"><span>Aug</span></td>
+            <td colspan="5"><span>Sep</span></td>
+            <td colspan="4"><span>Oct</span></td>
+            <td colspan="4"><span>Nov</span></td>
+            <td colspan="5"><span>Dec</span></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td><span>Mon</span></td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td><span>Wed</span></td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td><span>Fri</span></td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+<button id="start">Start Recording</button>
+<button id="test">Show Test</button>
+<canvas id="canvas" style="display:none;"></canvas>
+<p style="color: white" id="status">Status: </p>
+
+<p style="color: white">Enter your messages below:</p>
+<textarea id="messagesText">
+Hello World!
+Test
+</textarea>
+
+<script type="module" src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+<script type="module" src="capture.js"></script>
 </body>
-<script src="script.js"></script>
 </html>
