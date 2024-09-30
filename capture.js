@@ -82,4 +82,4 @@ function stopRecording() {
 
     startButton.disabled = false;
     stopButton.disabled = true;
-};
+}

@@ -86,7 +86,7 @@ async function RenderText(str) {
                         revealTimes[y][x] -= 1;
                         allZero = false;
                     } else {
-                        randomFill = row[x] == 1 ? getRandomNumber(3, 4) : getRandomNumber(0, 0);
+                        randomFill = row[x] === 1 ? getRandomNumber(3, 4) : getRandomNumber(0, 0);
                     }
 
                     cell.style.backgroundColor = "var(--fill-color-" + randomFill + ")";
@@ -113,7 +113,7 @@ async function RenderText(str) {
                     const row = grid[y];
                     for (let x = 0; x < 52; x++) {
                         const cell = cells[y][x];
-                        let randomFill = row[scrollAmount + x] == 1 ? getRandomNumber(3, 4) : getRandomNumber(0, 0);
+                        let randomFill = row[scrollAmount + x] === 1 ? getRandomNumber(3, 4) : getRandomNumber(0, 0);
                         cell.style.backgroundColor = "var(--fill-color-" + randomFill + ")";
                     }
                 }
