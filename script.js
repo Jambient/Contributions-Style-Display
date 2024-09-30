@@ -159,7 +159,7 @@ testButton.addEventListener('click', async () => {
     testButton.disabled = true;
     await renderMessages(parseMessages());
     startRecording.disabled = false;
-    testButton.disabled = true;
+    testButton.disabled = false;
     setStatus("Test Finished")
 });
 
