@@ -3,69 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contributions Style Display</title>
+    <title>Contributions Display</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Preload external scripts for better reliability -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js" as="script">
+    <link rel="preload" href="gif.worker.js" as="script">
 </head>
 <body>
-<div id="content" style="">
-    <table>
-        <thead>
-        <tr style="height: 13px">
-            <td style="width: 35px"></td>
-            <td colspan="5"><span>Jan</span></td>
-            <td colspan="4"><span>Feb</span></td>
-            <td colspan="5"><span>Mar</span></td>
-            <td colspan="4"><span>Apr</span></td>
-            <td colspan="4"><span>May</span></td>
-            <td colspan="5"><span>Jun</span></td>
-            <td colspan="4"><span>Jul</span></td>
-            <td colspan="4"><span>Aug</span></td>
-            <td colspan="5"><span>Sep</span></td>
-            <td colspan="4"><span>Oct</span></td>
-            <td colspan="4"><span>Nov</span></td>
-            <td colspan="5"><span>Dec</span></td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td></td>
-        </tr>
-        <tr>
-            <td><span>Mon</span></td>
-        </tr>
-        <tr>
-            <td></td>
-        </tr>
-        <tr>
-            <td><span>Wed</span></td>
-        </tr>
-        <tr>
-            <td></td>
-        </tr>
-        <tr>
-            <td><span>Fri</span></td>
-        </tr>
-        <tr>
-            <td></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-<br>
-<button id="start">Start Recording</button>
-<button id="test">Show Test</button>
-<canvas id="canvas" style="display:none;"></canvas>
-<p style="color: white" id="status">Status: </p>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-calendar-alt"></i>
+                <h1>Contributions Display</h1>
+            </div>
+        </header>
+        
+        <main>
+            <div class="visualization-container">
+                <!-- Original content div with table - DO NOT MODIFY -->
+                <div id="content" style="">
+                    <table>
+                        <thead>
+                        <tr style="height: 13px">
+                            <td style="width: 35px"></td>
+                            <td colspan="5"><span>Jan</span></td>
+                            <td colspan="4"><span>Feb</span></td>
+                            <td colspan="5"><span>Mar</span></td>
+                            <td colspan="4"><span>Apr</span></td>
+                            <td colspan="4"><span>May</span></td>
+                            <td colspan="5"><span>Jun</span></td>
+                            <td colspan="4"><span>Jul</span></td>
+                            <td colspan="4"><span>Aug</span></td>
+                            <td colspan="5"><span>Sep</span></td>
+                            <td colspan="4"><span>Oct</span></td>
+                            <td colspan="4"><span>Nov</span></td>
+                            <td colspan="5"><span>Dec</span></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><span>Mon</span></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><span>Wed</span></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><span>Fri</span></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="controls-container">
+                <div class="card">
+                    <h2>Message Settings</h2>
+                    
+                    <!-- New Message List UI -->
+                    <div class="message-manager">
+                        <div class="message-list" id="messageList">
+                            <!-- Message items will be added here dynamically -->
+                        </div>
+                        
+                        <div class="add-message-form">
+                            <div class="input-group">
+                                <input type="text" id="newMessage" placeholder="Enter new message..." maxlength="20">
+                                <button id="addMessage" class="btn small primary">
+                                    <i class="fas fa-plus"></i> Add
+                                </button>
+                            </div>
+                            <div class="message-hint">Messages are displayed one after another with pauses between them</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden textarea for compatibility with existing code -->
+                    <textarea id="messagesText" style="display: none;"></textarea>
+                    
+                    <div class="button-group">
+                        <button id="start" class="btn primary"><i class="fas fa-video"></i> Start Recording</button>
+                        <button id="test" class="btn secondary"><i class="fas fa-play"></i> Show Test</button>
+                    </div>
+                    
+                    <!-- Enhanced status container with improved progress bar -->
+                    <div class="status-container">
+                        <p id="status">Status: Ready</p>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="progressBar">
+                                <div class="progress-glow"></div>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress-label" id="progressLabel">0%</div>
+                                <div class="progress-stages">
+                                    <span class="stage" data-stage="prepare"></span>
+                                    <span class="stage" data-stage="process"></span>
+                                    <span class="stage" data-stage="complete"></span>
+                                </div>
+                            </div>
+                            <div class="progress-milestones">
+                                <span class="milestone" style="left: 25%" data-tooltip="Preparing"></span>
+                                <span class="milestone" style="left: 50%" data-tooltip="Processing"></span>
+                                <span class="milestone" style="left: 75%" data-tooltip="Finalizing"></span>
+                                <span class="milestone" style="left: 100%" data-tooltip="Complete"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 Contributions Display. Made with <i class="fas fa-heart"></i></p>
+        </footer>
+    </div>
 
-<p style="color: white">Enter your messages below:</p>
-<textarea id="messagesText">
-MAKE SURE TO STAR AND FAVOURITE
-THANKS :)
-</textarea>
+    <canvas id="canvas" style="display:none;"></canvas>
 
-<script type="module" src="script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
-<script type="module" src="capture.js"></script>
+    <!-- Load external libraries first -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+    
+    <!-- Then load application scripts -->
+    <script type="module" src="script.js"></script>
+    <script type="module" src="capture.js"></script>
 </body>
 </html>
