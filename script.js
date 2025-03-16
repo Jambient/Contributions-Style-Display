@@ -452,10 +452,17 @@ async function RenderText(str) {
         }
     }
 
-    let allowedRow = 1;
+    let allowedRow = 2;
     body.classList.remove('scrolling');
     await new Promise((resolve) => {
         intervalId = setInterval(function () {
+            // Exit early if test has been stopped
+            if (!isTestRunning) {
+                clearInterval(intervalId);
+                resolve();
+                return;
+            }
+                
             let allZero = true;
 
             for (let y = 0; y < Math.min(7, allowedRow); y++) {
@@ -499,6 +506,13 @@ async function RenderText(str) {
         await new Promise((resolve) => {
             let scrollAmount = 1;
             intervalId = setInterval(function () {
+                // Exit early if test has been stopped
+                if (!isTestRunning) {
+                    clearInterval(intervalId);
+                    resolve();
+                    return;
+                }
+                
                 for (let y = 0; y < 7; y++) {
                     const row = grid[y];
                     for (let x = 0; x < 52; x++) {
@@ -541,18 +555,32 @@ async function renderMessages(messages) {
     
     let msgIndex = 0;
     for (const message of messages) {
+        // Check if test has been stopped
+        if (!isTestRunning) {
+            break;
+        }
+        
         msgIndex++;
         const progress = Math.min(90, (msgIndex / messages.length) * 100);
         window.updateRenderProgress(progress, 100);
         
         await RenderText(message);
+        
+        // Check again after rendering is done
+        if (!isTestRunning) {
+            break;
+        }
+        
         await new Promise((resolve) => setTimeout(resolve, 2000));
     }
     
-    // Complete progress and update status
-    window.updateRenderProgress(100, 100);
-    statusContainer.className = 'status-container success';
-    setStatus(`Completed displaying all ${messages.length} messages`);
+    // Only update to completed if the test wasn't stopped
+    if (isTestRunning) {
+        // Complete progress and update status
+        window.updateRenderProgress(100, 100);
+        statusContainer.className = 'status-container success';
+        setStatus(`Completed displaying all ${messages.length} messages`);
+    }
 }
 
 export function resetAnimation() {
@@ -560,8 +588,28 @@ export function resetAnimation() {
     body.classList.remove('scrolling');
 }
 
+// Flag to track if test is running
+let isTestRunning = false;
+
 const testButton = document.getElementById('test');
 const startRecording = document.getElementById('start');
+const stopTestButton = document.getElementById('stopTest');
+
+// Stop test functionality
+stopTestButton.addEventListener('click', () => {
+    if (isTestRunning) {
+        resetAnimation();
+        isTestRunning = false;
+        stopTestButton.disabled = true;
+        startRecording.disabled = false;
+        testButton.disabled = false;
+        
+        const statusContainer = document.querySelector('.status-container');
+        statusContainer.className = 'status-container warning';
+        setStatus('Test stopped by user');
+        window.updateRenderProgress(0, 100);
+    }
+});
 
 testButton.addEventListener('click', async () => {
     resetAnimation();
@@ -585,17 +633,29 @@ testButton.addEventListener('click', async () => {
     
     startRecording.disabled = true;
     testButton.disabled = true;
+    stopTestButton.disabled = false;
+    isTestRunning = true;
     
-    window.updateRenderProgress(10, 100);
-    await renderMessages(msgs);
-    
-    startRecording.disabled = false;
-    testButton.disabled = false;
-    window.updateRenderProgress(100, 100);
-    
-    // Final status update
-    statusContainer.className = 'status-container success';
-    setStatus(`Test completed successfully! All ${msgs.length-1} messages displayed.`);
+    try {
+        window.updateRenderProgress(10, 100);
+        await renderMessages(msgs);
+        
+        if (isTestRunning) {
+            isTestRunning = false;
+            window.updateRenderProgress(100, 100);
+            
+            // Final status update
+            statusContainer.className = 'status-container success';
+            setStatus(`Test completed successfully! All ${msgs.length-1} messages displayed.`);
+        }
+    } catch (error) {
+        console.error('Test interrupted:', error);
+    } finally {
+        startRecording.disabled = false;
+        testButton.disabled = false;
+        stopTestButton.disabled = true;
+        isTestRunning = false;
+    }
 });
 
 export { rows, cells, renderMessages, parseMessages, setStatus};
