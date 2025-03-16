@@ -18,7 +18,7 @@ A unique web tool that creates animated GitHub-style contribution grid displays 
 ### Online Version
 
 The easiest way to use this tool is through the online version:
-1. Visit [Contributions Text Displayer](https://jambient.github.io/ContributionsTextDisplayer/) in your browser
+1. Visit [Contributions Text Displayer](https://jambient.github.io/Contributions-Style-Display/) in your browser
 2. Start creating your messages right away!
 
 ### Local Installation
